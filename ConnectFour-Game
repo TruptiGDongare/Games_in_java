@@ -1,0 +1,94 @@
+import java.util.Scanner;
+
+public class connectfour {
+    public static void main(String[] args) {
+        char[][] board = new char[6][7]; // 6 rows, 7 columns
+        Scanner scanner = new Scanner(System.in);
+        char currentPlayer = 'R';
+        boolean gameOver = false;
+
+        // Initialize board with empty spaces
+        for (char[] row : board) {
+            java.util.Arrays.fill(row, ' ');
+        }
+
+        while (!gameOver) {
+            // Display board
+            for (char[] row : board) {
+                System.out.println(java.util.Arrays.toString(row));
+            }
+
+            // Prompt player for input
+            System.out.println("Player " + currentPlayer + "'s turn. Enter column number (0-6): ");
+            int col = scanner.nextInt();
+
+            // Drop piece
+            for (int row = 5; row >= 0; row--) {
+                if (board[row][col] == ' ') {
+                    board[row][col] = currentPlayer;
+                    break;
+                }
+            }
+
+            // Check for win
+            if (checkWin(board, currentPlayer)) {
+                System.out.println("Player " + currentPlayer + " wins!");
+                gameOver = true;
+            }
+
+            // Switch player
+            currentPlayer = (currentPlayer == 'R') ? 'Y' : 'R';
+        }
+
+        scanner.close();
+    }
+
+    // Method to check for win
+    public static boolean checkWin(char[][] board, char player) {
+        // Check horizontal
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 4; col++) {
+                if (board[row][col] == player &&
+                    board[row][col + 1] == player &&
+                    board[row][col + 2] == player &&
+                    board[row][col + 3] == player) {
+                    return true;
+                }
+            }
+        }
+        // Check vertical
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 7; col++) {
+                if (board[row][col] == player &&
+                    board[row + 1][col] == player &&
+                    board[row + 2][col] == player &&
+                    board[row + 3][col] == player) {
+                    return true;
+                }
+            }
+        }
+        // Check diagonal (positive slope)
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 4; col++) {
+                if (board[row][col] == player &&
+                    board[row + 1][col + 1] == player &&
+                    board[row + 2][col + 2] == player &&
+                    board[row + 3][col + 3] == player) {
+                    return true;
+                }
+            }
+        }
+        // Check diagonal (negative slope)
+        for (int row = 3; row < 6; row++) {
+            for (int col = 0; col < 4; col++) {
+                if (board[row][col] == player &&
+                    board[row - 1][col + 1] == player &&
+                    board[row - 2][col + 2] == player &&
+                    board[row - 3][col + 3] == player) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
